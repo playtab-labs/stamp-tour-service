@@ -9,15 +9,14 @@ import java.util.List;
 @Getter
 public class SpotListResponse {
 
-    // 전체 스팟 개수
     private final int totalCount;
-
-    // 스팟 목록
+    private final int visitedCount;
     private final List<SpotResponse> spots;
 
     @Builder
-    public SpotListResponse(int totalCount, List<SpotResponse> spots) {
+    public SpotListResponse(int totalCount, int visitedCount, List<SpotResponse> spots) {
         this.totalCount = totalCount;
+        this.visitedCount = visitedCount;
         this.spots = spots;
     }
 }

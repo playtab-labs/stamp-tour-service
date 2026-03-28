@@ -2,33 +2,48 @@ package com.playtab.stamptourservice.spot;
 
 import com.playtab.stamptourservice.spot.dto.SpotListResponse;
 import com.playtab.stamptourservice.spot.dto.SpotResponse;
+import com.playtab.stamptourservice.visit.StampVisit;
+import com.playtab.stamptourservice.visit.StampVisitRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 // 스팟 관련 비즈니스 로직 처리
 @Service
 @RequiredArgsConstructor
 public class SpotService {
 
-    // final 필드 생성자 주입 (Lombok)
     private final SpotRepository spotRepository;
+    private final StampVisitRepository stampVisitRepository;
 
-    // 활성화된 Spot 엔티티 목록 조회
-    public List<Spot> getActiveSpots() {
-        return spotRepository.findAllByIsActiveTrueOrderByDisplayOrderAsc();
-    }
+    // Jira 조회 방향 기준: 전체 spot + 내 방문 여부
+    public SpotListResponse getMyStampSpots(Long userId) {
+        List<Spot> spots = spotRepository.findAll();
 
-    // 활성화된 Spot 목록을 응답 DTO 형태로 변환해서 반환
-    public SpotListResponse getActiveSpotResponses() {
-        List<SpotResponse> spotResponses = spotRepository.findAllByIsActiveTrueOrderByDisplayOrderAsc()
-                .stream()
-                .map(SpotResponse::from)
+        List<SpotResponse> spotResponses = spots.stream()
+                .map(spot -> {
+                    Optional<StampVisit> optionalVisit = stampVisitRepository.findByUserIdAndSpot(userId, spot);
+
+                    return SpotResponse.builder()
+                            .spotId(spot.getId())
+                            .spotName(spot.getName())
+                            .spotDescription(spot.getDescription())
+                            .visited(optionalVisit.isPresent())
+                            .visitedAt(optionalVisit.map(StampVisit::getCreatedAt).orElse(null))
+                            .build();
+                })
                 .toList();
 
+        int totalCount = spotResponses.size();
+        int visitedCount = (int) spotResponses.stream()
+                .filter(SpotResponse::getVisited)
+                .count();
+
         return SpotListResponse.builder()
-                .totalCount(spotResponses.size())
+                .totalCount(totalCount)
+                .visitedCount(visitedCount)
                 .spots(spotResponses)
                 .build();
     }

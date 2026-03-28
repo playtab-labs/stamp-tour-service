@@ -33,14 +33,6 @@ public class Spot {
     @Column(columnDefinition = "TEXT")
     private String description;
 
-    // 화면에 보여줄 순서
-    @Column(name = "display_order", nullable = false)
-    private Integer displayOrder;
-
-    // 사용 여부
-    @Column(name = "is_active", nullable = false)
-    private Boolean isActive;
-
     // 생성 시각
     @Column(name = "created_at", nullable = false)
     private LocalDateTime createdAt;
@@ -49,14 +41,10 @@ public class Spot {
     @Column(name = "updated_at", nullable = false)
     private LocalDateTime updatedAt;
 
-    // 빌더 생성자
     @Builder
-    public Spot(String name, String description, Integer displayOrder, Boolean isActive,
-                LocalDateTime createdAt, LocalDateTime updatedAt) {
+    public Spot(String name, String description, LocalDateTime createdAt, LocalDateTime updatedAt) {
         this.name = name;
         this.description = description;
-        this.displayOrder = displayOrder;
-        this.isActive = isActive;
         this.createdAt = createdAt;
         this.updatedAt = updatedAt;
     }

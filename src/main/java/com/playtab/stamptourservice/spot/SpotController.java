@@ -11,12 +11,12 @@ import org.springframework.web.bind.annotation.RestController;
 @RequiredArgsConstructor
 public class SpotController {
 
-    // final 필드 생성자 주입
     private final SpotService spotService;
 
-    // 활성 스팟 목록 조회 API
+    // 내 스탬프 스팟 조회 API
     @GetMapping("/api/v1/spots")
-    public ApiResponse<SpotListResponse> getSpots() {
-        return ApiResponse.success(spotService.getActiveSpotResponses());
+    public ApiResponse<SpotListResponse> getMyStampSpots() {
+        Long userId = 1L; // 임시 userId
+        return ApiResponse.success(spotService.getMyStampSpots(userId));
     }
 }

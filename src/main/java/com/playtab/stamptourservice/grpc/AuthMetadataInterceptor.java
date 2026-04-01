@@ -16,7 +16,7 @@ public class AuthMetadataInterceptor implements ServerInterceptor {
     public static final Context.Key<String> USER_ID_CTX_KEY = Context.key("userId");
 
     private static final Metadata.Key<String> USER_ID_METADATA_KEY =
-            Metadata.Key.of("user-id", Metadata.ASCII_STRING_MARSHALLER);
+            Metadata.Key.of("x-identity-id", Metadata.ASCII_STRING_MARSHALLER);
 
     @Override
     public <ReqT, RespT> ServerCall.Listener<ReqT> interceptCall(

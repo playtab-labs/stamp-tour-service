@@ -7,9 +7,10 @@ import com.playtab.stamptourservice.visit.StampVisitService;
 import com.playtab.stamptourservice.visit.dto.StampVisitCreateResponse;
 import io.grpc.stub.StreamObserver;
 import lombok.RequiredArgsConstructor;
+import net.devh.boot.grpc.server.service.GrpcService;
 import org.springframework.stereotype.Service;
 
-@Service
+@GrpcService
 @RequiredArgsConstructor
 public class StampTourGrpcService extends StampTourServiceGrpc.StampTourServiceImplBase {
 

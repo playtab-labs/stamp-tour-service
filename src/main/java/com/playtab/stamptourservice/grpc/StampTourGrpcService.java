@@ -1,14 +1,16 @@
 package com.playtab.stamptourservice.grpc;
 
+import com.playtab.stamptourservice.common.auth.AuthContext;
 import com.playtab.stamptourservice.spot.SpotService;
 import com.playtab.stamptourservice.spot.dto.SpotListResponse;
 import com.playtab.stamptourservice.visit.StampVisitService;
 import com.playtab.stamptourservice.visit.dto.StampVisitCreateResponse;
 import io.grpc.stub.StreamObserver;
 import lombok.RequiredArgsConstructor;
+import net.devh.boot.grpc.server.service.GrpcService;
 import org.springframework.stereotype.Service;
 
-@Service
+@GrpcService
 @RequiredArgsConstructor
 public class StampTourGrpcService extends StampTourServiceGrpc.StampTourServiceImplBase {
 
@@ -17,7 +19,7 @@ public class StampTourGrpcService extends StampTourServiceGrpc.StampTourServiceI
 
     @Override
     public void visit(VisitRequest request, StreamObserver<VisitResponse> responseObserver) {
-        Long userId = 1L; // 임시 userId
+        Long userId = AuthContext.getUserId();
 
         try {
             StampVisitCreateResponse result = stampVisitService.createVisit(userId, request.getSpotId());
@@ -42,7 +44,7 @@ public class StampTourGrpcService extends StampTourServiceGrpc.StampTourServiceI
 
     @Override
     public void getMyStamps(GetMyStampsRequest request, StreamObserver<GetMyStampsResponse> responseObserver) {
-        Long userId = 1L; // 임시 userId
+        Long userId = AuthContext.getUserId();
 
         SpotListResponse result = spotService.getMyStampSpots(userId);
 

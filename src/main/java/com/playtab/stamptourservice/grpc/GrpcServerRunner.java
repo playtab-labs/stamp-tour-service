@@ -23,7 +23,7 @@ public class GrpcServerRunner {
         this.stampTourGrpcService = stampTourGrpcService;
     }
 
-    // @jakarta.annotation.PostConstruct
+    @jakarta.annotation.PostConstruct
     public void start() throws IOException {
         server = ServerBuilder.forPort(grpcPort)
                 .addService(stampTourGrpcService)

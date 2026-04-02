@@ -23,21 +23,21 @@ public class StampVisitController {
     @Operation(summary = "내 방문 기록 조회")
     @GetMapping("/api/v1/visits/me")
     public ApiResponse<StampVisitListResponse> getMyVisits() {
-        Long userId = 1L;
+        String userId = "temp-user-id"; // 임시 userId
         return ApiResponse.success(stampVisitService.getMyVisits(userId));
     }
 
     @Operation(summary = "내 진행률 조회")
     @GetMapping("/api/v1/visits/me/progress")
     public ApiResponse<ProgressResponse> getMyProgress() {
-        Long userId = 1L;
+        String userId = "temp-user-id"; // 임시 userId
         return ApiResponse.success(stampVisitService.getProgress(userId));
     }
 
     @Operation(summary = "방문 기록 생성")
     @PostMapping("/api/v1/visits")
     public ApiResponse<StampVisitCreateResponse> createVisit(@RequestBody StampVisitRequest request) {
-        Long userId = 1L;
+        String userId = "temp-user-id"; // 임시 userId
         return ApiResponse.success(stampVisitService.createVisit(userId, request.getSpotId()));
     }
 }

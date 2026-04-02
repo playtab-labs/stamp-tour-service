@@ -19,7 +19,7 @@ public class StampTourGrpcService extends StampTourServiceGrpc.StampTourServiceI
 
     @Override
     public void visit(VisitRequest request, StreamObserver<VisitResponse> responseObserver) {
-        Long userId = AuthContext.getUserId();
+        String userId = AuthContext.getUserId();
 
         try {
             StampVisitCreateResponse result = stampVisitService.createVisit(userId, request.getSpotId());
@@ -44,7 +44,7 @@ public class StampTourGrpcService extends StampTourServiceGrpc.StampTourServiceI
 
     @Override
     public void getMyStamps(GetMyStampsRequest request, StreamObserver<GetMyStampsResponse> responseObserver) {
-        Long userId = AuthContext.getUserId();
+        String userId = AuthContext.getUserId();
 
         SpotListResponse result = spotService.getMyStampSpots(userId);
 

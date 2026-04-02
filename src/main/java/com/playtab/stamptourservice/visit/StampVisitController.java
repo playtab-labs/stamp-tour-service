@@ -5,34 +5,36 @@ import com.playtab.stamptourservice.visit.dto.ProgressResponse;
 import com.playtab.stamptourservice.visit.dto.StampVisitCreateResponse;
 import com.playtab.stamptourservice.visit.dto.StampVisitListResponse;
 import com.playtab.stamptourservice.visit.dto.StampVisitRequest;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
-// 방문 기록 관련 API 컨트롤러
+@Tag(name = "StampVisit", description = "방문 기록 관련 API")
 @RestController
 @RequiredArgsConstructor
 public class StampVisitController {
 
     private final StampVisitService stampVisitService;
 
-    // 임시 userId 사용
+    @Operation(summary = "내 방문 기록 조회")
     @GetMapping("/api/v1/visits/me")
     public ApiResponse<StampVisitListResponse> getMyVisits() {
         Long userId = 1L;
         return ApiResponse.success(stampVisitService.getMyVisits(userId));
     }
 
-    // 임시 userId 사용
+    @Operation(summary = "내 진행률 조회")
     @GetMapping("/api/v1/visits/me/progress")
     public ApiResponse<ProgressResponse> getMyProgress() {
         Long userId = 1L;
         return ApiResponse.success(stampVisitService.getProgress(userId));
     }
 
-    // 임시 userId 사용
+    @Operation(summary = "방문 기록 생성")
     @PostMapping("/api/v1/visits")
     public ApiResponse<StampVisitCreateResponse> createVisit(@RequestBody StampVisitRequest request) {
         Long userId = 1L;

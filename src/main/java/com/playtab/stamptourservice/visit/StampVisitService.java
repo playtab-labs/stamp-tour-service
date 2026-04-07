@@ -46,7 +46,7 @@ public class StampVisitService {
         return StampVisitListResponse.builder()
                 .totalCount(visitResponses.size())
                 .visits(visitResponses)
-                .build();
+                .build();   
     }
 
     // 특정 유저의 진행률 조회

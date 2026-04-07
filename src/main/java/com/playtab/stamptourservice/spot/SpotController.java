@@ -18,7 +18,7 @@ public class SpotController {
     @Operation(summary = "내 스탬프 스팟 조회")
     @GetMapping("/api/v1/spots")
     public ApiResponse<SpotListResponse> getMyStampSpots() {
-        Long userId = 1L; // 임시 userId
+        String userId = "temp-user-id"; // 임시 userId
         return ApiResponse.success(spotService.getMyStampSpots(userId));
     }
 }

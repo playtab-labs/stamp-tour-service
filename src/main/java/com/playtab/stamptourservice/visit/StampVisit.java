@@ -39,9 +39,9 @@ public class StampVisit {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    // 방문한 유저 ID
+    // 방문한 유저 ID (UUID)
     @Column(name = "user_id", nullable = false)
-    private Long userId;
+    private String userId;
 
     // 방문한 스팟 (N:1 관계)
     @ManyToOne(fetch = FetchType.LAZY)
@@ -54,7 +54,7 @@ public class StampVisit {
 
     // 빌더 생성자
     @Builder
-    public StampVisit(Long userId, Spot spot, LocalDateTime createdAt) {
+    public StampVisit(String userId, Spot spot, LocalDateTime createdAt) {
         this.userId = userId;
         this.spot = spot;
         this.createdAt = createdAt;

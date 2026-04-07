@@ -6,13 +6,13 @@ public final class AuthContext {
 
     private AuthContext() {}
 
-    public static Long getUserId() {
+    public static String getUserId() {
         String userId = AuthMetadataInterceptor.USER_ID_CTX_KEY.get();
 
         if (userId == null || userId.isBlank()) {
             throw new IllegalStateException("Missing user-id in metadata");
         }
 
-        return Long.parseLong(userId);
+        return userId;
     }
 }

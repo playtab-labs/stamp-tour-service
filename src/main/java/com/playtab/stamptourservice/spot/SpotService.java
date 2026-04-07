@@ -19,7 +19,7 @@ public class SpotService {
     private final StampVisitRepository stampVisitRepository;
 
     // Jira 조회 방향 기준: 전체 spot + 내 방문 여부
-    public SpotListResponse getMyStampSpots(Long userId) {
+    public SpotListResponse getMyStampSpots(String userId) {
         List<Spot> spots = spotRepository.findAll();
 
         List<SpotResponse> spotResponses = spots.stream()

@@ -23,17 +23,17 @@ public class StampVisitService {
     private final SpotRepository spotRepository;
 
     // 특정 유저가 특정 스팟을 방문했는지 확인
-    public boolean hasVisited(Long userId, Spot spot) {
+    public boolean hasVisited(String userId, Spot spot) {
         return stampVisitRepository.existsByUserIdAndSpot(userId, spot);
     }
 
     // 특정 유저가 방문한 총 스팟 수 조회
-    public long countVisitedSpots(Long userId) {
+    public long countVisitedSpots(String userId) {
         return stampVisitRepository.countByUserId(userId);
     }
 
     // 특정 유저의 방문 기록 목록 조회
-    public StampVisitListResponse getMyVisits(Long userId) {
+    public StampVisitListResponse getMyVisits(String userId) {
         List<StampVisitResponse> visitResponses = stampVisitRepository.findAllByUserId(userId)
                 .stream()
                 .map(visit -> StampVisitResponse.builder()
@@ -50,7 +50,7 @@ public class StampVisitService {
     }
 
     // 특정 유저의 진행률 조회
-    public ProgressResponse getProgress(Long userId) {
+    public ProgressResponse getProgress(String userId) {
         long visitedCount = stampVisitRepository.countByUserId(userId);
         int totalCount = spotRepository.findAll().size();
 
@@ -62,7 +62,7 @@ public class StampVisitService {
     }
 
     // 스탬프 적립
-    public StampVisitCreateResponse createVisit(Long userId, Long spotId) {
+    public StampVisitCreateResponse createVisit(String userId, Long spotId) {
         Spot spot = spotRepository.findById(spotId)
                 .orElseThrow(() -> new SpotNotFoundException("존재하지 않는 스팟입니다."));
 

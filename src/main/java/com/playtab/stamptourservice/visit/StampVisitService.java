@@ -10,12 +10,13 @@ import com.playtab.stamptourservice.visit.dto.StampVisitListResponse;
 import com.playtab.stamptourservice.visit.dto.StampVisitResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.List;
 
-// 방문 기록 관련 비즈니스 로직 처리
 @Service
+@Transactional(readOnly = true)
 @RequiredArgsConstructor
 public class StampVisitService {
 
@@ -61,7 +62,7 @@ public class StampVisitService {
                 .build();
     }
 
-    // 스탬프 적립
+    @Transactional
     public StampVisitCreateResponse createVisit(String userId, Long spotId) {
         Spot spot = spotRepository.findById(spotId)
                 .orElseThrow(() -> new SpotNotFoundException("존재하지 않는 스팟입니다."));

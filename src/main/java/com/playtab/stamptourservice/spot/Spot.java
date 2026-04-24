@@ -10,6 +10,8 @@ import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.JdbcTypeCode;
+import org.hibernate.type.SqlTypes;
 
 import java.time.LocalDateTime;
 
@@ -41,11 +43,16 @@ public class Spot {
     @Column(name = "updated_at", nullable = false)
     private LocalDateTime updatedAt;
 
+    @JdbcTypeCode(SqlTypes.JSON)
+    @Column(columnDefinition = "jsonb")
+    private Location location;
+
     @Builder
-    public Spot(String name, String description, LocalDateTime createdAt, LocalDateTime updatedAt) {
+    public Spot(String name, String description, LocalDateTime createdAt, LocalDateTime updatedAt, Location location) {
         this.name = name;
         this.description = description;
         this.createdAt = createdAt;
         this.updatedAt = updatedAt;
+        this.location = location;
     }
 }

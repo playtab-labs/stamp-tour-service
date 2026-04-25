@@ -42,7 +42,7 @@ public class StampVisitService {
                 .stream()
                 .map(visit -> StampVisitResponse.builder()
                         .spotId(visit.getSpot().getId())
-                        .spotName(visit.getSpot().getName())
+                        .spotName(visit.getSpot().getName().getOrDefault("ko", ""))
                         .visitedAt(visit.getCreatedAt())
                         .build())
                 .toList();
@@ -110,7 +110,7 @@ public class StampVisitService {
 
         return StampVisitCreateResponse.builder()
                 .spotId(spot.getId())
-                .spotName(spot.getName())
+                .spotName(spot.getName().getOrDefault("ko", ""))
                 .visitedAt(stampVisit.getCreatedAt())
                 .visitedCount(visitedCount)
                 .totalCount(totalCount)

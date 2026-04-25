@@ -46,7 +46,8 @@ public class StampTourGrpcService extends StampTourServiceGrpc.StampTourServiceI
     public void getMyStamps(GetMyStampsRequest request, StreamObserver<GetMyStampsResponse> responseObserver) {
         String userId = AuthContext.getUserId();
 
-        SpotListResponse result = spotService.getMyStampSpots(userId);
+        String locale = request.getLocale().isBlank() ? "ko" : request.getLocale();
+        SpotListResponse result = spotService.getMyStampSpots(userId, locale);
 
         GetMyStampsResponse.Builder responseBuilder = GetMyStampsResponse.newBuilder()
                 .setTotalCount(result.getTotalCount())

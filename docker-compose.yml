@@ -3,7 +3,6 @@ services:
     image: ${ECR_IMAGE}
     container_name: stamp-tour-service
     ports:
-      - "8081:8081"
       - "9098:9098"
     env_file:
       - .env

@@ -6,12 +6,13 @@ import com.playtab.stamptourservice.visit.StampVisit;
 import com.playtab.stamptourservice.visit.StampVisitRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
 
-// 스팟 관련 비즈니스 로직 처리
 @Service
+@Transactional(readOnly = true)
 @RequiredArgsConstructor
 public class SpotService {
 

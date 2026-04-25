@@ -38,4 +38,6 @@ message StampSpot {
   string spot_description = 3;
   bool visited = 4;
   string visited_at = 5;
+  double latitude = 6;
+  double longitude = 7;
 }

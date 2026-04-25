@@ -11,6 +11,7 @@ import com.playtab.stamptourservice.visit.dto.StampVisitCreateResponse;
 import com.playtab.stamptourservice.visit.dto.StampVisitListResponse;
 import com.playtab.stamptourservice.visit.dto.StampVisitResponse;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -65,7 +66,9 @@ public class StampVisitService {
     }
 
     // 적정 거리 확정 후 수치 수정 필요
-    private static final double MAX_DISTANCE_METERS = 100.0;
+    @Value("${stamp-tour.max-distance-meters:100.0}")
+    private double maxDistanceMeters;
+
     private static final double EARTH_RADIUS_METERS = 6_371_000.0;
 
     private double calculateDistance(double lat1, double lng1, double lat2, double lng2) {
@@ -80,18 +83,18 @@ public class StampVisitService {
     @Transactional
     public StampVisitCreateResponse createVisit(String userId, Long spotId, double userLat, double userLng) {
         Spot spot = spotRepository.findById(spotId)
-                .orElseThrow(() -> new SpotNotFoundException("존재하지 않는 스팟입니다."));
+                .orElseThrow(() -> new SpotNotFoundException("Spot not found."));
 
         Location location = spot.getLocation();
         if (location != null) {
             double distance = calculateDistance(userLat, userLng, location.getLatitude(), location.getLongitude());
-            if (distance > MAX_DISTANCE_METERS) {
-                throw new TooFarFromSpotException("스팟과의 거리가 너무 멉니다.");
+            if (distance > maxDistanceMeters) {
+                throw new TooFarFromSpotException("Too far from the spot.");
             }
         }
 
         if (stampVisitRepository.existsByUserIdAndSpot(userId, spot)) {
-            throw new AlreadyVisitedException("이미 방문한 스팟입니다.");
+            throw new AlreadyVisitedException("Already visited this spot.");
         }
 
         StampVisit stampVisit = StampVisit.builder()

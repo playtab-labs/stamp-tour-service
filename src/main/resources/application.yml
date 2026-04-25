@@ -25,3 +25,6 @@ spring:
 grpc:
   server:
     port: ${GRPC_PORT:9098}
+
+stamp-tour:
+  max-distance-meters: ${MAX_DISTANCE_METERS:100.0}

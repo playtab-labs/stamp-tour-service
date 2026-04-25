@@ -2,6 +2,8 @@ package com.playtab.stamptourservice.visit;
 
 import com.playtab.stamptourservice.common.exception.AlreadyVisitedException;
 import com.playtab.stamptourservice.common.exception.SpotNotFoundException;
+import com.playtab.stamptourservice.common.exception.TooFarFromSpotException;
+import com.playtab.stamptourservice.spot.Location;
 import com.playtab.stamptourservice.spot.Spot;
 import com.playtab.stamptourservice.spot.SpotRepository;
 import com.playtab.stamptourservice.visit.dto.ProgressResponse;
@@ -62,10 +64,31 @@ public class StampVisitService {
                 .build();
     }
 
+    // 적정 거리 확정 후 수치 수정 필요
+    private static final double MAX_DISTANCE_METERS = 100.0;
+    private static final double EARTH_RADIUS_METERS = 6_371_000.0;
+
+    private double calculateDistance(double lat1, double lng1, double lat2, double lng2) {
+        double dLat = Math.toRadians(lat2 - lat1);
+        double dLng = Math.toRadians(lng2 - lng1);
+        double a = Math.sin(dLat / 2) * Math.sin(dLat / 2)
+                + Math.cos(Math.toRadians(lat1)) * Math.cos(Math.toRadians(lat2))
+                * Math.sin(dLng / 2) * Math.sin(dLng / 2);
+        return EARTH_RADIUS_METERS * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+    }
+
     @Transactional
-    public StampVisitCreateResponse createVisit(String userId, Long spotId) {
+    public StampVisitCreateResponse createVisit(String userId, Long spotId, double userLat, double userLng) {
         Spot spot = spotRepository.findById(spotId)
                 .orElseThrow(() -> new SpotNotFoundException("존재하지 않는 스팟입니다."));
+
+        Location location = spot.getLocation();
+        if (location != null) {
+            double distance = calculateDistance(userLat, userLng, location.getLatitude(), location.getLongitude());
+            if (distance > MAX_DISTANCE_METERS) {
+                throw new TooFarFromSpotException("스팟과의 거리가 너무 멉니다.");
+            }
+        }
 
         if (stampVisitRepository.existsByUserIdAndSpot(userId, spot)) {
             throw new AlreadyVisitedException("이미 방문한 스팟입니다.");

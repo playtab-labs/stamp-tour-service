@@ -22,7 +22,7 @@ public class StampTourGrpcService extends StampTourServiceGrpc.StampTourServiceI
         String userId = AuthContext.getUserId();
 
         try {
-            StampVisitCreateResponse result = stampVisitService.createVisit(userId, request.getSpotId());
+            StampVisitCreateResponse result = stampVisitService.createVisit(userId, request.getSpotId(), request.getLatitude(), request.getLongitude());
 
             VisitResponse response = VisitResponse.newBuilder()
                     .setSuccess(true)

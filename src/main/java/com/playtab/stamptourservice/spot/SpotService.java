@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 @Service
@@ -19,20 +20,18 @@ public class SpotService {
     private final SpotRepository spotRepository;
     private final StampVisitRepository stampVisitRepository;
 
-    // Jira 조회 방향 기준: 전체 spot + 내 방문 여부
-    public SpotListResponse getMyStampSpots(String userId) {
+    public SpotListResponse getMyStampSpots(String userId, String locale) {
         List<Spot> spots = spotRepository.findAll();
 
         List<SpotResponse> spotResponses = spots.stream()
                 .map(spot -> {
                     Optional<StampVisit> optionalVisit = stampVisitRepository.findByUserIdAndSpot(userId, spot);
-
                     Location location = spot.getLocation();
 
                     return SpotResponse.builder()
                             .spotId(spot.getId())
-                            .spotName(spot.getName())
-                            .spotDescription(spot.getDescription())
+                            .spotName(getLocalized(spot.getName(), locale))
+                            .spotDescription(getLocalized(spot.getDescription(), locale))
                             .visited(optionalVisit.isPresent())
                             .visitedAt(optionalVisit.map(StampVisit::getCreatedAt).orElse(null))
                             .latitude(location != null ? location.getLatitude() : null)
@@ -51,5 +50,10 @@ public class SpotService {
                 .visitedCount(visitedCount)
                 .spots(spotResponses)
                 .build();
+    }
+
+    private String getLocalized(Map<String, String> i18n, String locale) {
+        if (i18n == null) return null;
+        return i18n.getOrDefault(locale, i18n.getOrDefault("ko", ""));
     }
 }

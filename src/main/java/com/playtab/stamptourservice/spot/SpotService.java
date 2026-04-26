@@ -27,12 +27,16 @@ public class SpotService {
                 .map(spot -> {
                     Optional<StampVisit> optionalVisit = stampVisitRepository.findByUserIdAndSpot(userId, spot);
 
+                    Location location = spot.getLocation();
+
                     return SpotResponse.builder()
                             .spotId(spot.getId())
                             .spotName(spot.getName())
                             .spotDescription(spot.getDescription())
                             .visited(optionalVisit.isPresent())
                             .visitedAt(optionalVisit.map(StampVisit::getCreatedAt).orElse(null))
+                            .latitude(location != null ? location.getLatitude() : null)
+                            .longitude(location != null ? location.getLongitude() : null)
                             .build();
                 })
                 .toList();

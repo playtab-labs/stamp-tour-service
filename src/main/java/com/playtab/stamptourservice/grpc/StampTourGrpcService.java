@@ -22,7 +22,7 @@ public class StampTourGrpcService extends StampTourServiceGrpc.StampTourServiceI
         String userId = AuthContext.getUserId();
 
         try {
-            StampVisitCreateResponse result = stampVisitService.createVisit(userId, request.getSpotId());
+            StampVisitCreateResponse result = stampVisitService.createVisit(userId, request.getSpotId(), request.getLatitude(), request.getLongitude());
 
             VisitResponse response = VisitResponse.newBuilder()
                     .setSuccess(true)
@@ -59,6 +59,8 @@ public class StampTourGrpcService extends StampTourServiceGrpc.StampTourServiceI
                     .setSpotDescription(spot.getSpotDescription() == null ? "" : spot.getSpotDescription())
                     .setVisited(Boolean.TRUE.equals(spot.getVisited()))
                     .setVisitedAt(spot.getVisitedAt() == null ? "" : spot.getVisitedAt().toString())
+                    .setLatitude(spot.getLatitude() != null ? spot.getLatitude() : 0.0)
+                    .setLongitude(spot.getLongitude() != null ? spot.getLongitude() : 0.0)
                     .build();
 
             responseBuilder.addSpots(grpcSpot);
